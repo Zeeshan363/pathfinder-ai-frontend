@@ -10,6 +10,8 @@ import {
   GraduationCap,
   Briefcase,
 } from "lucide-react";
+import Footer from "./Footer";
+import Navbar from "./Navbar";
 
 const LandingPage = () => {
   useEffect(() => {
@@ -64,6 +66,8 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen section-light overflow-hidden">
+      <Navbar />
+
       {/* Hero Section */}
       <div className="relative gradient-primary text-white">
         <div className="absolute inset-0 overflow-hidden">
@@ -193,6 +197,7 @@ const LandingPage = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +29,9 @@ const Navbar = () => {
               Contact
             </a>
             <ThemeToggle />
-            <button className="btn-primary">Sign In</button>
+            <Link to="/signup" className="btn-primary">
+              Sign In
+            </Link>
           </div>
 
           <div className="md:hidden flex items-center gap-4">
