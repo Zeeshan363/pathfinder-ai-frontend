@@ -2,6 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  /* Layout */
+  .container-padding {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-24;
+  }
+
+  /* Typography */
+  .heading-1 {
+    @apply text-7xl font-bold tracking-tight;
+  }
+
+  .heading-2 {
+    @apply text-4xl font-bold;
+  }
+
+  .heading-3 {
+    @apply text-2xl font-semibold;
+  }
+
+  .paragraph {
+    @apply text-gray-600 dark:text-gray-300;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply bg-primary-600 text-white px-4 py-2 rounded-full hover:bg-primary-700 transition-colors;
+  }
+
+  .btn-secondary {
+    @apply border-2 border-primary-600 text-primary-600 px-4 py-2 rounded-full hover:bg-primary-600 hover:text-white transition-colors;
+  }
+
+  /* Navigation */
+  .nav-link {
+    @apply text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2;
+  }
+
+  /* Theme Toggle */
+  .theme-toggle {
+    @apply p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors;
+  }
+
+  .gradient-primary {
+    @apply bg-gradient-to-br from-primary-900 to-primary-600 dark:from-primary-800 dark:to-primary-600;
+  }
+
+  .section-light {
+    @apply bg-white dark:bg-gray-900 transition-colors;
+  }
+
+  .section-accent {
+    @apply bg-primary-50 dark:bg-gray-800 transition-colors;
+  }
+
+  .footer-link {
+    @apply text-gray-400 hover:text-primary-600 dark:text-gray-500 dark:hover:text-primary-400 transition-colors;
+  }
+
+  .heading-primary {
+    @apply text-primary-600 dark:text-primary-400;
+  }
+
+  .text-body {
+    @apply text-gray-600 dark:text-gray-300 transition-colors;
+  }
+}
+
 @keyframes float {
   0%,
   100% {
