@@ -12,6 +12,7 @@ import LandingPage from "./components/LandingPage";
 import SignupPage from "./components/SignupPage";
 import SigninPage from "./components/SigninPage";
 import { Toaster } from "react-hot-toast";
+import StudentProfile from "./pages/student/profile";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/signin" element={<SigninPage />} />
+              <Route path="/student/profile" element={<StudentProfile />} />
             </Routes>
           </main>
         </div>
