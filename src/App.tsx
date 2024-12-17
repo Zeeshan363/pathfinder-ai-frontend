@@ -10,6 +10,7 @@ import Navbar from "./components/Navbar";
 import LandingPage from "./components/LandingPage";
 import Footer from "./components/Footer";
 import SignupPage from "./components/SignupPage";
+import SigninPage from "./components/SigninPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/signup" element={<SignupPage />} />
+            <Route path="/signin" element={<SigninPage />} />
           </Routes>
         </main>
       </div>

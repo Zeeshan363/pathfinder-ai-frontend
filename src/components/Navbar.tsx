@@ -29,7 +29,7 @@ const Navbar = () => {
               Contact
             </a>
             <ThemeToggle />
-            <Link to="/signup" className="btn-primary">
+            <Link to="/signin" className="btn-primary">
               Sign In
             </Link>
           </div>
