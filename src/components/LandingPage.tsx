@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+import { Link } from "react-router-dom";
 
 const LandingPage = () => {
   useEffect(() => {
@@ -86,9 +87,12 @@ const LandingPage = () => {
               Discover your ideal career path with AI-powered guidance and
               expert counselors. Your journey to success starts here.
             </p>
-            <button className="animate-bounce-soft bg-white text-purple-900 px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-100 transition-colors flex items-center gap-2 mx-auto dark:bg-gray-900 dark:text-white">
+            <Link
+              to="/signin"
+              className="animate-bounce-soft bg-white text-purple-900 px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-100 transition-colors flex items-center gap-2 mx-auto dark:bg-gray-900 dark:text-white w-fit"
+            >
               Start Your Journey <ArrowRight className="w-5 h-5" />
-            </button>
+            </Link>
           </div>
         </div>
         <div className="absolute bottom-0 w-full">

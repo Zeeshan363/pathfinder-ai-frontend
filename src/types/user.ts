@@ -22,3 +22,13 @@ export interface LoginFormData {
   email: string;
   password: string;
 }
+
+export interface AuthApisResponse {
+  accessToken: string;
+  data: {
+    id: number;
+    email: string;
+    name: string;
+    role: string;
+  };
+}

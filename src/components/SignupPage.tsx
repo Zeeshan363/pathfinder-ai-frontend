@@ -1,7 +1,10 @@
 // src/components/SignupPage.tsx
 import React, { useState } from "react";
-import { UserRole } from "../types/user"; // We'll create this next
+import { SignupFormData, UserRole } from "../types/user"; // We'll create this next
 import { Link } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { signupApi } from "../api/auth/signup";
+import toast from "react-hot-toast";
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
@@ -11,9 +14,20 @@ const SignupPage = () => {
     role: UserRole.STUDENT,
   });
 
+  const signUpMutation = useMutation({
+    mutationFn: (body: SignupFormData) => signupApi(formData),
+    onSuccess: (data) => {
+      toast.success("Registration successful.");
+    },
+  });
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
+    const res = signUpMutation.mutateAsync(formData);
+    if (res) {
+      console.log("response...", res);
+    }
     // Here you'll add your API call to register the user
   };
 

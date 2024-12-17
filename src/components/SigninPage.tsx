@@ -1,6 +1,10 @@
 // src/components/SigninPage.tsx
+import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { LoginFormData } from "../types/user";
+import { signinApi } from "../api/auth/signin";
+import toast from "react-hot-toast";
 
 const SigninPage = () => {
   const [formData, setFormData] = useState({
@@ -8,10 +12,20 @@ const SigninPage = () => {
     password: "",
   });
 
+  const signinMutation = useMutation({
+    mutationFn: (body: LoginFormData) => signinApi(formData),
+    onSuccess: (data) => {
+      toast.success("Log in successful.");
+    },
+  });
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
-    // Here you'll add your API call to register the user
+    const res = signinMutation.mutateAsync(formData);
+    if (res) {
+      console.log("response...", res);
+    }
   };
 
   return (
