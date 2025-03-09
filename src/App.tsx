@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   BrowserRouter,
+  Navigate
 } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
@@ -13,6 +14,18 @@ import SignupPage from "./components/SignupPage";
 import SigninPage from "./components/SigninPage";
 import { Toaster } from "react-hot-toast";
 import StudentProfile from "./pages/student/profile";
+import DashboardPage from "./pages/DashboardPage";
+import {CreateProfilePage} from "./pages/CreateProfilePage";
+import EditProfilePage from "./pages/EditProfilePage";
+
+// Protected route component
+const ProtectedRoute = ({ children }: any) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return <Navigate to="/signin" replace />;
+  }
+  return children;
+};
 
 function App() {
   return (
@@ -27,7 +40,28 @@ function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/signin" element={<SigninPage />} />
-              <Route path="/student/profile" element={<StudentProfile />} />
+              
+              {/* Protected routes */}
+              <Route path="/student/profile" element={
+                <ProtectedRoute>
+                  <StudentProfile />
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              } />
+              <Route path="/profile/create" element={
+                <ProtectedRoute>
+                  <CreateProfilePage />
+                </ProtectedRoute>
+              } />
+              <Route path="/profile/edit" element={
+                <ProtectedRoute>
+                  <EditProfilePage />
+                </ProtectedRoute>
+              } />
             </Routes>
           </main>
         </div>

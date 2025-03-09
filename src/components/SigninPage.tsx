@@ -1,30 +1,51 @@
 // src/components/SigninPage.tsx
 import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LoginFormData } from "../types/user";
 import { signinApi } from "../api/auth/signin";
 import toast from "react-hot-toast";
 
 const SigninPage = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const signinMutation = useMutation({
     mutationFn: (body: LoginFormData) => signinApi(formData),
-    onSuccess: (data) => {
-      toast.success("Log in successful.");
+    onSuccess: (data: any) => {
+      console.log("data to be here", data)
+      if(data?.data?.access_token){
+        localStorage.setItem("token", data?.data.access_token);
+        toast.success("Log in successful.");
+        
+        if (data?.data.user && data?.data.user.isProfileComplete) {
+          navigate("/dashboard");
+        } else {
+          navigate("/profile/create");
+        }
+      }
     },
+    onError: (error: any) => {
+      const errorMessage = error.response?.data?.message || "Login failed. Please check your credentials.";
+      toast.error(errorMessage);
+    },
+    onSettled: () => {
+      setIsLoading(false);
+    }
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    const res = signinMutation.mutateAsync(formData);
-    if (res) {
-      console.log("response...", res);
+    setIsLoading(true);
+    
+    try {
+      await signinMutation.mutateAsync(formData);
+    } catch (error) {
+      console.error("Login error:", error);
     }
   };
 
@@ -52,6 +73,7 @@ const SigninPage = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
+                  disabled={isLoading}
                 />
               </div>
 
@@ -68,11 +90,16 @@ const SigninPage = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
+                  disabled={isLoading}
                 />
               </div>
 
-              <button type="submit" className="btn-primary w-full py-3">
-                Login
+              <button 
+                type="submit" 
+                className="btn-primary w-full py-3"
+                disabled={isLoading}
+              >
+                {isLoading ? "Logging in..." : "Login"}
               </button>
 
               <p className="text-center text-body mt-4">

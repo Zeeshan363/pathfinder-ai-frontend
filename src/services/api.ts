@@ -1,14 +1,12 @@
-// src/services/api.ts
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://localhost:8888/api", // Your API base URL
+  baseURL: "http://localhost:8888/api", // Your existing API base URL
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Add interceptors for auth token
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -16,3 +14,18 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token");
+      window.location.href = '/signin';
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default api;

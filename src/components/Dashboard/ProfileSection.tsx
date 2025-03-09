@@ -1,0 +1,149 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
+interface ProfileSectionProps {
+  user: any;
+  profile: any;
+}
+
+const ProfileSection: React.FC<ProfileSectionProps> = ({ user, profile }) => {
+  const navigate = useNavigate();
+
+  if (!user) return null;
+
+  return (
+    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="bg-purple-600 p-6 text-white">
+        <h2 className="text-xl font-semibold">Profile</h2>
+      </div>
+
+      <div className="p-6">
+        <div className="flex flex-col items-center mb-6">
+          <div className="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+            {profile?.photoUrl ? (
+              <img
+                src={profile.photoUrl}
+                alt={user.name}
+                className="w-24 h-24 rounded-full object-cover"
+              />
+            ) : (
+              <span className="text-purple-600 text-4xl font-bold">
+                {user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
+              </span>
+            )}
+          </div>
+          <h3 className="text-xl font-semibold">{user.name || 'User'}</h3>
+          <p className="text-gray-500">{user.email}</p>
+          <p className="text-sm bg-purple-100 text-purple-800 px-3 py-1 rounded-full mt-2">
+            {user.role?.charAt(0).toUpperCase() + user.role?.slice(1).toLowerCase() || 'Student'}
+          </p>
+        </div>
+
+        {profile ? (
+          <>
+            {profile.about && (
+              <div className="mb-6">
+                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">About</h4>
+                <p className="text-gray-700">{profile.about}</p>
+              </div>
+            )}
+
+            {profile.technicalSkills && profile.technicalSkills.length > 0 && (
+              <div className="mb-6">
+                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
+                  Technical Skills
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {profile.technicalSkills.map((skill: string, index: number) => (
+                    <span
+                      key={index}
+                      className="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {profile.softSkills && profile.softSkills.length > 0 && (
+              <div className="mb-6">
+                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
+                  Soft Skills
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {profile.softSkills.map((skill: string, index: number) => (
+                    <span
+                      key={index}
+                      className="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {profile.interests && profile.interests.length > 0 && (
+              <div className="mb-6">
+                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
+                  Interests
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {profile.interests.map((interest: string, index: number) => (
+                    <span
+                      key={index}
+                      className="bg-yellow-100 text-yellow-800 text-xs px-3 py-1 rounded-full"
+                    >
+                      {interest}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {profile.education && profile.education.length > 0 && (
+              <div className="mb-6">
+                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
+                  Education
+                </h4>
+                {profile.education.map((edu: any, index: number) => (
+                  <div key={index} className="mb-3 pb-3 border-b border-gray-100 last:border-0">
+                    <p className="font-medium text-gray-800">
+                      {edu.degree} in {edu.major}
+                    </p>
+                    <p className="text-gray-600 text-sm">{edu.institution}</p>
+                    <p className="text-gray-500 text-xs">
+                      {edu.startYear} - {edu.endYear || 'Present'}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <button
+              onClick={() => navigate('/profile/edit')}
+              className="w-full py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition"
+            >
+              Edit Profile
+            </button>
+          </>
+        ) : (
+          <div className="text-center">
+            <p className="text-gray-600 mb-4">
+              You haven't created your profile yet.
+            </p>
+            <button
+              onClick={() => navigate('/profile/create')}
+              className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition"
+            >
+              Create Profile
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ProfileSection;

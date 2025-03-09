@@ -28,18 +28,18 @@ const Navbar = () => {
             <a href="#" className="nav-link">
               Contact
             </a>
-            <ThemeToggle />
+            {/* <ThemeToggle /> */}
             <Link to="/signin" className="btn-primary">
               Sign In
             </Link>
           </div>
 
-          <div className="md:hidden flex items-center gap-4">
+          {/* <div className="md:hidden flex items-center gap-4">
             <ThemeToggle />
             <button onClick={() => setIsOpen(!isOpen)} className="nav-link">
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
 
