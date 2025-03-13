@@ -18,8 +18,8 @@ const SigninPage = () => {
     mutationFn: (body: LoginFormData) => signinApi(formData),
     onSuccess: (data: any) => {
       console.log("data to be here", data)
-      if(data?.data?.access_token){
-        localStorage.setItem("token", data?.data.access_token);
+      if(data?.data?.access){
+        localStorage.setItem("token", data?.data.access);
         toast.success("Log in successful.");
         
         if (data?.data.user && data?.data.user.isProfileComplete) {
