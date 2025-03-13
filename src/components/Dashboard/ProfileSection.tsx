@@ -2,14 +2,16 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface ProfileSectionProps {
-  user: any;
   profile: any;
 }
 
-const ProfileSection: React.FC<ProfileSectionProps> = ({ user, profile }) => {
+const ProfileSection: React.FC<ProfileSectionProps> = ({ profile }) => {
   const navigate = useNavigate();
 
-  if (!user) return null;
+  if (!profile) return null;
+
+  // Check if profile exists (has an ID)
+  const hasProfile = !!profile && !!profile.id;
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -18,29 +20,24 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ user, profile }) => {
       </div>
 
       <div className="p-6">
-        <div className="flex flex-col items-center mb-6">
-          <div className="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mb-4">
-            {profile?.photoUrl ? (
-              <img
-                src={profile.photoUrl}
-                alt={user.name}
-                className="w-24 h-24 rounded-full object-cover"
-              />
-            ) : (
-              <span className="text-purple-600 text-4xl font-bold">
-                {user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
-              </span>
-            )}
-          </div>
-          <h3 className="text-xl font-semibold">{user.name || 'User'}</h3>
-          <p className="text-gray-500">{user.email}</p>
-          <p className="text-sm bg-purple-100 text-purple-800 px-3 py-1 rounded-full mt-2">
-            {user.role?.charAt(0).toUpperCase() + user.role?.slice(1).toLowerCase() || 'Student'}
-          </p>
-        </div>
-
-        {profile ? (
+        {hasProfile ? (
           <>
+            <div className="flex flex-col items-center mb-6">
+              <div className="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                {profile.photo_url ? (
+                  <img
+                    src={profile.photo_url}
+                    alt="Profile"
+                    className="w-24 h-24 rounded-full object-cover"
+                  />
+                ) : (
+                  <span className="text-purple-600 text-4xl font-bold">
+                    {profile.about ? profile.about.charAt(0).toUpperCase() : 'P'}
+                  </span>
+                )}
+              </div>
+            </div>
+
             {profile.about && (
               <div className="mb-6">
                 <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">About</h4>
@@ -48,13 +45,13 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ user, profile }) => {
               </div>
             )}
 
-            {profile.technicalSkills && profile.technicalSkills.length > 0 && (
+            {profile.technical_skills && profile.technical_skills.length > 0 && (
               <div className="mb-6">
                 <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
                   Technical Skills
                 </h4>
                 <div className="flex flex-wrap gap-2">
-                  {profile.technicalSkills.map((skill: string, index: number) => (
+                  {profile.technical_skills.map((skill: string, index: number) => (
                     <span
                       key={index}
                       className="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full"
@@ -66,13 +63,13 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ user, profile }) => {
               </div>
             )}
 
-            {profile.softSkills && profile.softSkills.length > 0 && (
+            {profile.soft_skills && profile.soft_skills.length > 0 && (
               <div className="mb-6">
                 <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
                   Soft Skills
                 </h4>
                 <div className="flex flex-wrap gap-2">
-                  {profile.softSkills.map((skill: string, index: number) => (
+                  {profile.soft_skills.map((skill: string, index: number) => (
                     <span
                       key={index}
                       className="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full"
@@ -102,6 +99,24 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ user, profile }) => {
               </div>
             )}
 
+            {profile.languages && profile.languages.length > 0 && (
+              <div className="mb-6">
+                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
+                  Languages
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {profile.languages.map((language: string, index: number) => (
+                    <span
+                      key={index}
+                      className="bg-purple-100 text-purple-800 text-xs px-3 py-1 rounded-full"
+                    >
+                      {language}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {profile.education && profile.education.length > 0 && (
               <div className="mb-6">
                 <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
@@ -114,19 +129,28 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ user, profile }) => {
                     </p>
                     <p className="text-gray-600 text-sm">{edu.institution}</p>
                     <p className="text-gray-500 text-xs">
-                      {edu.startYear} - {edu.endYear || 'Present'}
+                      {edu.start_year} - {edu.end_year || 'Present'}
                     </p>
                   </div>
                 ))}
               </div>
             )}
 
-            <button
+            {profile.career_goals && (
+              <div className="mb-6">
+                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
+                  Career Goals
+                </h4>
+                <p className="text-gray-700">{profile.career_goals}</p>
+              </div>
+            )}
+
+            {/* <button
               onClick={() => navigate('/profile/edit')}
               className="w-full py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition"
             >
               Edit Profile
-            </button>
+            </button> */}
           </>
         ) : (
           <div className="text-center">

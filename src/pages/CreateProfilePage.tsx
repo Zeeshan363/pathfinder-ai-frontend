@@ -33,16 +33,61 @@ export const CreateProfilePage: React.FC = () => {
   });
 
   const createProfileMutation = useMutation({
-    mutationFn: (profileData: any) => api.post('/profile', profileData),
-    onSuccess: () => {
+    mutationFn: async (profileData: any) => {
+      const formattedData = {
+        about: profileData.about,
+        technical_skills: profileData.technicalSkills,
+        soft_skills: profileData.softSkills,
+        languages: profileData.languages,
+        interests: profileData.interests,
+        career_goals: profileData.careerGoals
+      };
+      
+      console.log('Sending profile data:', formattedData);
+      return api.post('/profile/createProfile/', formattedData);
+    },
+    onSuccess: async (response) => {
       toast.success('Profile created successfully');
+      
+      if (formData.education.length > 0) {
+        try {
+          for (const edu of formData.education) {
+            await addEducationToProfile(edu);
+          }
+          toast.success('Education information added successfully');
+        } catch (error) {
+          console.error('Error adding education:', error);
+          toast.error('Failed to add education information');
+        }
+      }
+      
       navigate('/dashboard');
     },
     onError: (err: any) => {
+      console.error('Profile creation error:', err);
       setError(err.response?.data?.message || 'Failed to create profile. Please try again.');
       toast.error('Failed to create profile');
     }
   });
+
+  const addEducationToProfile = async (educationData: any) => {
+    try {
+      const formattedData = {
+        degree: educationData.degree,
+        institution: educationData.institution,
+        start_year: educationData.startYear,
+        end_year: educationData.endYear || null,
+        major: educationData.major
+      };
+      
+      console.log('Sending education data:', formattedData);
+      const response = await api.post('/profile/addEducationToProfile/', formattedData);
+      return response.data;
+    } catch (error) {
+      console.error('Error adding education:', error);
+      throw error;
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -67,6 +112,8 @@ export const CreateProfilePage: React.FC = () => {
         endYear: '',
         major: ''
       });
+    } else {
+      toast.error('Please fill in all required education fields');
     }
   };
 
@@ -147,6 +194,12 @@ export const CreateProfilePage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!formData.about || formData.technicalSkills.length === 0) {
+      toast.error('Please fill in the required fields (About and Technical Skills)');
+      return;
+    }
+    
     createProfileMutation.mutate(formData);
   };
 
@@ -171,7 +224,7 @@ export const CreateProfilePage: React.FC = () => {
 
             <div className="mb-6">
               <label htmlFor="about" className="block text-sm font-medium text-gray-700 mb-1">
-                About Me
+                About Me <span className="text-red-500">*</span>
               </label>
               <textarea
                 id="about"
@@ -181,12 +234,13 @@ export const CreateProfilePage: React.FC = () => {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                 placeholder="Tell us about yourself..."
+                required
               ></textarea>
             </div>
 
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Technical Skills
+                Technical Skills <span className="text-red-500">*</span>
               </label>
               <div className="flex">
                 <input
@@ -221,6 +275,9 @@ export const CreateProfilePage: React.FC = () => {
                   </div>
                 ))}
               </div>
+              {formData.technicalSkills.length === 0 && (
+                <p className="text-sm text-red-500 mt-1">Please add at least one technical skill</p>
+              )}
             </div>
 
             <div className="mb-6">
@@ -364,7 +421,7 @@ export const CreateProfilePage: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Degree
+                      Degree <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -377,7 +434,7 @@ export const CreateProfilePage: React.FC = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Institution
+                      Institution <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -390,7 +447,7 @@ export const CreateProfilePage: React.FC = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Start Year
+                      Start Year <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -416,7 +473,7 @@ export const CreateProfilePage: React.FC = () => {
                   </div>
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Major/Field of Study
+                      Major/Field of Study <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"

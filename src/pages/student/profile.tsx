@@ -158,7 +158,7 @@ const StudentProfileStepper = () => {
               {Object.entries(formData.skills).map(([type, skills]) => (
                 <div key={type}>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    {type.charAt(0).toUpperCase() + type.slice(1)} Skills
+                    {type?.charAt(0).toUpperCase() + type.slice(1)} Skills
                   </label>
                   <input
                     type="text"
