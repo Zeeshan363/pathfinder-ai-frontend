@@ -16,10 +16,11 @@ export interface SignupFormData {
   password: string;
   name?: string;
   role: UserRole;
+  username?: string;
 }
 
 export interface LoginFormData {
-  email: string;
+  username: string;
   password: string;
 }
 

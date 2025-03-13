@@ -15,7 +15,7 @@ const SignupPage = () => {
   });
 
   const signUpMutation = useMutation({
-    mutationFn: (body: SignupFormData) => signupApi(formData),
+    mutationFn: (body: SignupFormData) => signupApi({username: formData?.name, ...formData}),
     onSuccess: (data) => {
       toast.success("Registration successful.");
       navigate('/signin')

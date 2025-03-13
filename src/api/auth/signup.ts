@@ -3,7 +3,7 @@ import { AuthApisResponse, SignupFormData } from "../../types/user";
 
 export const signupApi = (payload: SignupFormData) => {
   return api.post<AuthApisResponse, AuthApisResponse>(
-    "/auth/register",
+    "/auth/register/",
     payload
   );
 };

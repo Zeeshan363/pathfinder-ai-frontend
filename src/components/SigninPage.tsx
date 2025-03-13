@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 const SigninPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -61,17 +61,17 @@ const SigninPage = () => {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="email" className="text-body block mb-2">
-                  Email
+                <label htmlFor="username" className="text-body block mb-2">
+                  Username
                 </label>
                 <input
-                  type="email"
-                  id="email"
+                  type="username"
+                  id="username"
                   required
                   className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
-                  value={formData.email}
+                  value={formData.username}
                   onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
+                    setFormData({ ...formData, username: e.target.value })
                   }
                   disabled={isLoading}
                 />
