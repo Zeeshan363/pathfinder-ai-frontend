@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { signupApi } from "../api/auth/signup";
 import toast from "react-hot-toast";
+import axios, { AxiosError } from "axios";
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -20,14 +21,35 @@ const SignupPage = () => {
       toast.success("Registration successful.");
       navigate('/signin')
     },
+    onError: (error: any) => {
+      // Handle API errors properly
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<any>;
+        if (axiosError.response?.data?.username) {
+          // Display username already exists error
+          toast.error(`Username already exists. Please choose a different username.`);
+        } else if (axiosError.response?.data) {
+          // Handle other API errors
+          const errorMessage = Object.values(axiosError.response.data)[0];
+          toast.error(Array.isArray(errorMessage) ? errorMessage[0] : String(errorMessage));
+        } else {
+          // Fallback error message
+          toast.error("Registration failed. Please try again later.");
+        }
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    }
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
-    const res = signUpMutation.mutateAsync(formData);
-    if (res) {
-      console.log("response...", res);
+    try {
+      await signUpMutation.mutateAsync(formData);
+    } catch (error) {
+      // Error is already handled in onError callback
+      console.log("Error caught in handleSubmit");
     }
   };
 
