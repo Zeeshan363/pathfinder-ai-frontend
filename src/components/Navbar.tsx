@@ -1,4 +1,3 @@
-// src/components/Navbar.tsx
 import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
@@ -16,30 +15,10 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            <a href="#" className="nav-link">
-              Home
-            </a>
-            <a href="#" className="nav-link">
-              About
-            </a>
-            <a href="#" className="nav-link">
-              Services
-            </a>
-            <a href="#" className="nav-link">
-              Contact
-            </a>
-            {/* <ThemeToggle /> */}
             <Link to="/signin" className="btn-primary">
               Sign In
             </Link>
           </div>
-
-          {/* <div className="md:hidden flex items-center gap-4">
-            <ThemeToggle />
-            <button onClick={() => setIsOpen(!isOpen)} className="nav-link">
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div> */}
         </div>
       </div>
 

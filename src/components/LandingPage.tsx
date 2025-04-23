@@ -192,12 +192,11 @@ const LandingPage = () => {
             with Pathfinder's AI-powered guidance.
           </p>
           <div className="flex gap-4 justify-center animate-on-scroll">
+          <Link to="/signin">
             <button className="bg-white dark:bg-gray-900 text-primary-900 dark:text-white px-8 py-3 rounded-full font-semibold hover:bg-primary-50 dark:hover:bg-gray-800 transition-colors">
               Get Started
             </button>
-            <button className="border-2 border-white px-8 py-3 rounded-full font-semibold hover:bg-primary-800 dark:hover:bg-primary-900 transition-colors">
-              Learn More
-            </button>
+          </Link>
           </div>
         </div>
       </div>
