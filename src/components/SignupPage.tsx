@@ -44,6 +44,13 @@ const SignupPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate all fields are filled
+    if (!formData.email || !formData.password || !formData.name) {
+      toast.error("All fields are required");
+      return;
+    }
+    
     console.log("Form submitted:", formData);
     try {
       await signUpMutation.mutateAsync(formData);
@@ -100,11 +107,12 @@ const SignupPage = () => {
 
               <div>
                 <label htmlFor="name" className="text-body block mb-2">
-                  Name (Optional)
+                  Username
                 </label>
                 <input
                   type="text"
                   id="name"
+                  required
                   className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
                   value={formData.name}
                   onChange={(e) =>

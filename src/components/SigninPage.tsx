@@ -22,7 +22,7 @@ const SigninPage = () => {
         localStorage.setItem("token", data?.data.access);
         toast.success("Log in successful.");
         
-        if (data?.data.user && data?.data.user.isProfileComplete) {
+        if (data?.data.user && data?.data.user.is_profile_complete) {
           navigate("/dashboard");
         } else {
           navigate("/profile/create");
