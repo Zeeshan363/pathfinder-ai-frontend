@@ -15,7 +15,8 @@ export const CreateProfilePage: React.FC = () => {
     languages: [] as string[],
     interests: [] as string[],
     careerGoals: '',
-    education: [] as any[]
+    education: [] as any[],
+    experience: [] as any[]
   });
 
   const [newSkill, setNewSkill] = useState('');
@@ -30,6 +31,11 @@ export const CreateProfilePage: React.FC = () => {
     startYear: '',
     endYear: '',
     major: ''
+  });
+
+  const [experienceForm, setExperienceForm] = useState({
+    companyName: '',
+    totalYearsExperience: ''
   });
 
   const createProfileMutation = useMutation({
@@ -61,6 +67,18 @@ export const CreateProfilePage: React.FC = () => {
         }
       }
       
+      if (formData.experience.length > 0) {
+        try {
+          for (const exp of formData.experience) {
+            await addExperienceToProfile(exp);
+          }
+          toast.success('Experience information added successfully');
+        } catch (error) {
+          console.error('Error adding experience:', error);
+          toast.error('Failed to add experience information');
+        }
+      }
+      
       navigate('/dashboard');
     },
     onError: (err: any) => {
@@ -89,6 +107,22 @@ export const CreateProfilePage: React.FC = () => {
     }
   };
 
+  const addExperienceToProfile = async (experienceData: any) => {
+    try {
+      const formattedData = {
+        company_name: experienceData.companyName,
+        total_years_experience: experienceData.totalYearsExperience
+      };
+      
+      console.log('Sending experience data:', formattedData);
+      const response = await api.post('/profile/addExperienceToProfile/', formattedData);
+      return response.data;
+    } catch (error) {
+      console.error('Error adding experience:', error);
+      throw error;
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -97,6 +131,11 @@ export const CreateProfilePage: React.FC = () => {
   const handleEducationChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setEducationForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleExperienceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setExperienceForm(prev => ({ ...prev, [name]: value }));
   };
 
   const addEducation = () => {
@@ -121,6 +160,28 @@ export const CreateProfilePage: React.FC = () => {
     setFormData(prev => ({
       ...prev,
       education: prev.education.filter((_, i) => i !== index)
+    }));
+  };
+
+  const addExperience = () => {
+    if (experienceForm.companyName && experienceForm.totalYearsExperience) {
+      setFormData(prev => ({
+        ...prev,
+        experience: [...prev.experience, experienceForm]
+      }));
+      setExperienceForm({
+        companyName: '',
+        totalYearsExperience: ''
+      });
+    } else {
+      toast.error('Please fill in all required experience fields');
+    }
+  };
+
+  const removeExperience = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      experience: prev.experience.filter((_, i) => i !== index)
     }));
   };
 
@@ -514,6 +575,78 @@ export const CreateProfilePage: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => removeEducation(index)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-lg font-medium text-gray-900">Experience</h3>
+              </div>
+              
+              <div className="bg-gray-50 p-4 rounded-md mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Company Name <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="companyName"
+                      value={experienceForm.companyName}
+                      onChange={handleExperienceChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="E.g., Tech Solutions Inc."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Total Years Experience <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="totalYearsExperience"
+                      value={experienceForm.totalYearsExperience}
+                      onChange={handleExperienceChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="E.g., 2.5"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={addExperience}
+                  className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition"
+                >
+                  Add Experience
+                </button>
+              </div>
+
+              {formData.experience.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 mb-3">Experience History</h4>
+                  {formData.experience.map((exp, index) => (
+                    <div
+                      key={index}
+                      className="mb-3 p-3 border border-gray-200 rounded-md bg-white flex justify-between items-center"
+                    >
+                      <div>
+                        <p className="font-medium text-gray-800">
+                          {exp.companyName}
+                        </p>
+                        <p className="text-gray-500 text-xs">
+                          {exp.totalYearsExperience} years
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeExperience(index)}
                         className="text-red-500 hover:text-red-700"
                       >
                         Remove

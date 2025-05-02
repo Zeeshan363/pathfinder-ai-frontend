@@ -136,6 +136,24 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ profile }) => {
               </div>
             )}
 
+            {profile.experience && profile.experience.length > 0 && (
+              <div className="mb-6">
+                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
+                  Experience
+                </h4>
+                {profile.experience.map((exp: any, index: number) => (
+                  <div key={index} className="mb-3 pb-3 border-b border-gray-100 last:border-0">
+                    <p className="font-medium text-gray-800">
+                      {exp.company_name}
+                    </p>
+                    <p className="text-gray-500 text-xs">
+                      {exp.total_years_experience} years
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+
             {profile.career_goals && (
               <div className="mb-6">
                 <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
