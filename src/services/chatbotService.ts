@@ -8,6 +8,10 @@ export interface ChatbotResponse {
   career?: any;
 }
 
+export interface TrainingResponse {
+  success: string;
+}
+
 export const chatbotService = {
   /**
    * Send a message to the chatbot and get a response
@@ -27,6 +31,53 @@ export const chatbotService = {
       return response.data;
     } catch (error) {
       console.error('Error in chatbot service:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Train the chatbot with a new example
+   */
+  trainChatbot: async (
+    message: string,
+    intent: string,
+    response?: string
+  ): Promise<TrainingResponse> => {
+    try {
+      const payload: any = {
+        message,
+        intent
+      };
+      
+      if (response) {
+        payload.response = response;
+      }
+      
+      const result = await api.post('/career/train_chatbot/', payload);
+      return result.data;
+    } catch (error) {
+      console.error('Error training chatbot:', error);
+      throw error;
+    }
+  },
+  
+  /**
+   * Create a new intent for the chatbot
+   */
+  createIntent: async (
+    tag: string,
+    patterns: string[],
+    responses: string[]
+  ): Promise<TrainingResponse> => {
+    try {
+      const result = await api.post('/career/train_chatbot/', {
+        new_intent: tag,
+        patterns,
+        responses
+      });
+      return result.data;
+    } catch (error) {
+      console.error('Error creating new intent:', error);
       throw error;
     }
   },

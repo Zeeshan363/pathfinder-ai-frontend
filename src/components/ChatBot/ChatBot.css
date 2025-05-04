@@ -150,6 +150,184 @@
   display: block;
 }
 
+/* Feedback buttons */
+.message-feedback {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.chatbot-message:hover .message-feedback {
+  opacity: 1;
+}
+
+.feedback-button {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.feedback-button.positive:hover {
+  background-color: #ecfdf5;
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.feedback-button.negative:hover {
+  background-color: #fef2f2;
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.feedback-received {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 0.7rem;
+  color: #10b981;
+}
+
+/* Training Form */
+.chatbot-training-form {
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 12px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  animation: fade-in 0.3s ease;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.chatbot-training-form h4 {
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+  color: #111827;
+}
+
+.training-context {
+  background-color: #f3f4f6;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.intent-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #111827;
+  background-color: white;
+}
+
+.training-response {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #111827;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.training-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.cancel-button {
+  padding: 8px 12px;
+  background-color: #f3f4f6;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.cancel-button:hover {
+  background-color: #e5e7eb;
+}
+
+.submit-button {
+  padding: 8px 12px;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submit-button:hover {
+  background-color: #4338ca;
+}
+
+.training-success {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 8px 12px;
+  background-color: #ecfdf5;
+  color: #10b981;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.training-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 8px 12px;
+  background-color: #fef2f2;
+  color: #ef4444;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
 /* Loading/Typing Indicator */
 .chatbot-message.loading {
   background-color: #f3f4f6;
@@ -254,26 +432,53 @@
     color: #f9fafb;
   }
   
-  .chatbot-message.loading {
-    background-color: #374151;
-  }
-  
-  .typing-indicator span {
-    background-color: #6b7280;
-  }
-  
   .chatbot-input {
-    background-color: #1f2937;
+    background-color: #374151;
     border-color: #4b5563;
-    color: #f9fafb;
+    color: white;
   }
   
   .chatbot-input::placeholder {
     color: #9ca3af;
   }
   
-  .chatbot-input-container {
-    border-top-color: rgba(255, 255, 255, 0.1);
+  .feedback-button {
+    border-color: #4b5563;
+    color: #d1d5db;
+  }
+  
+  .chatbot-training-form {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+  
+  .chatbot-training-form h4 {
+    color: #f9fafb;
+  }
+  
+  .training-context {
+    background-color: #111827;
+    color: #d1d5db;
+  }
+  
+  .form-group label {
+    color: #e5e7eb;
+  }
+  
+  .intent-select, .training-response {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: white;
+  }
+  
+  .cancel-button {
+    background-color: #374151;
+    color: #d1d5db;
+    border-color: #4b5563;
+  }
+  
+  .cancel-button:hover {
+    background-color: #4b5563;
   }
 }
 
