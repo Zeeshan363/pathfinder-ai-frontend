@@ -268,9 +268,6 @@ const ChatBot: React.FC<ChatBotProps> = ({ className }) => {
         aria-label="Toggle chat assistant"
       >
         {isOpen ? <X size={20} /> : <MessageSquare size={20} />}
-        <span className="chatbot-toggle-text">
-          {isOpen ? 'Close' : 'Career Assistant'}
-        </span>
       </button>
 
       {/* Chatbot window */}
