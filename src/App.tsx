@@ -17,6 +17,8 @@ import StudentProfile from "./pages/student/profile";
 import DashboardPage from "./pages/DashboardPage";
 import {CreateProfilePage} from "./pages/CreateProfilePage";
 import EditProfilePage from "./pages/EditProfilePage";
+import ChatBot from "./components/ChatBot";
+import CareerAIPage from "./pages/CareerAIPage";
 
 // Protected route component
 const ProtectedRoute = ({ children }: any) => {
@@ -62,8 +64,16 @@ function App() {
                   <EditProfilePage />
                 </ProtectedRoute>
               } />
+              <Route path="/career-ai" element={
+                <ProtectedRoute>
+                  <CareerAIPage />
+                </ProtectedRoute>
+              } />
             </Routes>
           </main>
+          
+          {/* ChatBot component will be visible on all pages */}
+          <ChatBot />
         </div>
       </BrowserRouter>
     </QueryClientProvider>
