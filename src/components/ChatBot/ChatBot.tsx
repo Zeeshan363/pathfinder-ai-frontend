@@ -251,14 +251,6 @@ const ChatBot: React.FC<ChatBotProps> = ({ className }) => {
     setFeedback(null);
   };
 
-  // Handle Enter key
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
-
   return (
     <div className={`chatbot-container ${className || ''}`}>
       {/* Chatbot toggle button */}
@@ -410,13 +402,26 @@ const ChatBot: React.FC<ChatBotProps> = ({ className }) => {
             <div ref={messagesEndRef} />
           </div>
           
-          <form onSubmit={handleSendMessage} className="chatbot-input-container">
+          <form 
+            onSubmit={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleSendMessage(e);
+            }} 
+            className="chatbot-input-container"
+          >
             <input
               ref={inputRef}
               type="text"
               value={inputValue}
               onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleSendMessage(e);
+                }
+              }}
               placeholder="Type your message..."
               disabled={isLoading}
               className="chatbot-input"

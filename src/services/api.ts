@@ -40,7 +40,8 @@ api.interceptors.response.use(
       console.error('Request setup error:', error.message);
     }
     
-    if (error.response?.status === 401) {
+    // Only redirect to signin for 401 errors on non-chatbot endpoints
+    if (error.response?.status === 401 && !error.config.url?.includes('/career/chatbot/')) {
       localStorage.removeItem("token");
       window.location.href = '/signin';
     }

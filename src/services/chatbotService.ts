@@ -22,15 +22,31 @@ export const chatbotService = {
     useProfile: boolean = true
   ): Promise<ChatbotResponse> => {
     try {
+      // For unauthenticated users, always set useProfile to false
+      const token = localStorage.getItem('token');
+      const shouldUseProfile = token ? useProfile : false;
+
       const response = await api.post('/career/chatbot/', {
         message,
         context,
-        use_profile: useProfile,
+        use_profile: shouldUseProfile,
       });
       
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error in chatbot service:', error);
+      // Return a friendly error message for unauthenticated users
+      if (error.response?.status === 401) {
+        return {
+          text: "I can help you with general career information. For personalized recommendations, please sign in.",
+          context: {
+            last_intent: "fallback",
+            mentioned_career: null,
+            awaiting_skills: false,
+            awaiting_career: false
+          }
+        };
+      }
       throw error;
     }
   },
