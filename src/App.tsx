@@ -19,6 +19,7 @@ import {CreateProfilePage} from "./pages/CreateProfilePage";
 import EditProfilePage from "./pages/EditProfilePage";
 import ChatBot from "./components/ChatBot";
 import CareerAIPage from "./pages/CareerAIPage";
+import AdminDashboard from "./pages/AdminDashboard";
 
 // Protected route component
 const ProtectedRoute = ({ children }: any) => {
@@ -69,6 +70,7 @@ function App() {
                   <CareerAIPage />
                 </ProtectedRoute>
               } />
+              <Route path="/admin" element={<AdminDashboard />} />
             </Routes>
           </main>
           

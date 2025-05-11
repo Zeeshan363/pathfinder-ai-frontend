@@ -21,8 +21,11 @@ const SigninPage = () => {
       if(data?.data?.access){
         localStorage.setItem("token", data?.data.access);
         toast.success("Log in successful.");
-        
-        if (data?.data.user && data?.data.user.is_profile_complete) {
+        const user = data?.data.user;
+        if (user && user.role === "ADMIN") {
+          localStorage.setItem("adminName", user.name || user.username || "Admin");
+          navigate("/admin");
+        } else if (user && user.is_profile_complete) {
           navigate("/dashboard");
         } else {
           navigate("/profile/create");
