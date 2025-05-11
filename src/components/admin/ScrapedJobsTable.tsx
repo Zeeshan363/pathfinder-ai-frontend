@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-interface User {
+interface Job {
   id: number;
-  username: string;
-  email: string;
-  name: string;
-  role: string;
-  is_verified: boolean;
-  is_profile_complete: boolean;
+  title: string;
+  company: string;
+  location: string;
+  date_posted: string;
+  url: string;
 }
 
 interface PaginatedResponse {
-  results: User[];
+  results: Job[];
   count: number;
   next: string | null;
   previous: string | null;
 }
 
-const UsersTable: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
+const ScrapedJobsTable: React.FC = () => {
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -28,11 +27,13 @@ const UsersTable: React.FC = () => {
   useEffect(() => {
     setLoading(true);
     const token = localStorage.getItem('token');
-    axios.get<PaginatedResponse>(`${process.env.REACT_APP_LOCAL_BACKEND}/auth/getAllUsers/?page=${page}&page_size=${pageSize}`,
+    axios.get<PaginatedResponse>(`${process.env.REACT_APP_LOCAL_BACKEND}/jobs/?page=${page}&page_size=${pageSize}`,
       token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
     )
       .then(res => {
-        setUsers(res.data.results);
+        // Sort jobs by date_posted descending (latest first)
+        const sorted = [...res.data.results].sort((a, b) => new Date(b.date_posted).getTime() - new Date(a.date_posted).getTime());
+        setJobs(sorted);
         setCount(res.data.count);
       })
       .finally(() => setLoading(false));
@@ -42,30 +43,22 @@ const UsersTable: React.FC = () => {
 
   return (
     <div className="bg-white rounded-lg shadow p-6 mt-4">
-      <h2 className="text-2xl font-bold mb-4">Users</h2>
+      <h2 className="text-2xl font-bold mb-4">Scraped Jobs</h2>
       {loading ? <div>Loading...</div> : (
         <table className="w-full border-collapse mb-4">
           <thead>
             <tr className="bg-gray-100">
-              <th className="py-3 px-2 text-left font-semibold">ID</th>
-              <th className="py-3 px-2 text-left font-semibold">Username</th>
-              <th className="py-3 px-2 text-left font-semibold">Email</th>
-              <th className="py-3 px-2 text-left font-semibold">Name</th>
-              <th className="py-3 px-2 text-left font-semibold">Role</th>
-              <th className="py-3 px-2 text-left font-semibold">Verified</th>
-              <th className="py-3 px-2 text-left font-semibold">Profile Complete</th>
+              <th className="py-3 px-2 text-left font-semibold">Title</th>
+              <th className="py-3 px-2 text-left font-semibold">Company</th>
+              <th className="py-3 px-2 text-left font-semibold">Location</th>
             </tr>
           </thead>
           <tbody>
-            {users.map(user => (
-              <tr key={user.id} className="border-b last:border-b-0">
-                <td className="py-2 px-2">{user.id}</td>
-                <td className="py-2 px-2">{user.username}</td>
-                <td className="py-2 px-2">{user.email}</td>
-                <td className="py-2 px-2">{user.name}</td>
-                <td className="py-2 px-2">{user.role}</td>
-                <td className="py-2 px-2">{user.is_verified ? 'Yes' : 'No'}</td>
-                <td className="py-2 px-2">{user.is_profile_complete ? 'Yes' : 'No'}</td>
+            {jobs.map(job => (
+              <tr key={job.id} className="border-b last:border-b-0">
+                <td className="py-2 px-2">{job.title}</td>
+                <td className="py-2 px-2">{job.company}</td>
+                <td className="py-2 px-2">{job.location}</td>
               </tr>
             ))}
           </tbody>
@@ -80,4 +73,4 @@ const UsersTable: React.FC = () => {
   );
 };
 
-export default UsersTable; 
+export default ScrapedJobsTable; 
