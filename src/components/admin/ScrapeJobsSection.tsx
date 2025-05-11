@@ -41,7 +41,7 @@ const ScrapeJobsSection: React.FC<Props> = ({ onViewScrapedJobs }) => {
         </div>
         <div>
           <label className="block mb-1 font-medium">Location</label>
-          <input type="text" className="w-full border rounded px-3 py-2" value={location} onChange={e => setLocation(e.target.value)} required />
+          <input type="text" className="w-full border rounded px-3 py-2" value={location} onChange={e => setLocation(e.target.value)} required placeholder="remote, hybrid, onsite" />
         </div>
         <div>
           <label className="block mb-1 font-medium">Limit</label>
