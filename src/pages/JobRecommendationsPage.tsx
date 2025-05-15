@@ -61,11 +61,6 @@ const JobRecommendationsPage: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-900">Job Recommendations</h1>
         </div>
         
-        {/* AI Job Recommendations Section */}
-        <section className="mb-8">
-          <AIJobRecommendations />
-        </section>
-        
         {/* Job Search Section */}
         <section className="mb-8">
           <div className="bg-white rounded-lg shadow-md p-6">

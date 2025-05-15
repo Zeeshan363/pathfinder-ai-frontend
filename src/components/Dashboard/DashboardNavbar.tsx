@@ -27,9 +27,6 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = () => {
             <Link to="/jobs/recommendations" className="text-gray-600 hover:text-purple-700">
               Job Recommendations
             </Link>
-            <Link to="/career-ai" className="text-gray-600 hover:text-purple-700">
-              Career AI
-            </Link>
           </div>
         </div>
 

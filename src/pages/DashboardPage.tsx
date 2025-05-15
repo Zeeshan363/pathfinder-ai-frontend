@@ -105,38 +105,6 @@ const DashboardPage: React.FC = () => {
                 )}
               </div>
             </div>
-            
-            {/* AI Job Recommendations Section */}
-            {hasProfile && (
-              <div className="mb-8">
-                <AIJobRecommendations />
-              </div>
-            )}
-            
-            {/* Career AI Feature Section */}
-            <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
-              <div className="flex items-start">
-                <div className="mr-4 bg-blue-100 p-3 rounded-full">
-                  <Brain size={24} className="text-blue-600" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-semibold text-blue-700 mb-2">AI-Powered Career Counseling</h2>
-                  <p className="text-gray-600 mb-4">
-                    Get personalized career guidance with our new AI-powered career counselor. 
-                    Discover careers that match your skills, analyze skill gaps, and plan your career path.
-                  </p>
-                  <button
-                    onClick={() => navigate('/career-ai')}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition flex items-center"
-                  >
-                    <span>Explore Career AI</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
           </>
         )}
       </main>
