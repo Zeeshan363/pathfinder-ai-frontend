@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -11,6 +12,22 @@ const Footer = () => {
               Navigate your career journey with AI-powered insights and expert
               guidance.
             </p>
+          </div>
+          
+          <div className="col-span-1">
+            <h4 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Links</h4>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/" className="text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link to="/feedback" className="text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400">
+                  Feedback
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
 

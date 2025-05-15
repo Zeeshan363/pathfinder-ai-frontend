@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import AdminHeader from '../components/admin/AdminHeader';
 import AdminSidebar from '../components/admin/AdminSidebar';
 import UsersTable from '../components/admin/UsersTable';
 import ScrapeJobsSection from '../components/admin/ScrapeJobsSection';
 import ScrapedJobsTable from '../components/admin/ScrapedJobsTable';
+import FeedbackTable from '../components/admin/FeedbackTable';
 
 const AdminDashboard: React.FC = () => {
-  const [section, setSection] = useState<'users' | 'scrape' | 'scraped'>('users');
+  const [section, setSection] = useState<'users' | 'scrape' | 'scraped' | 'feedback'>('users');
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Handle direct navigation to /admin/feedback by setting the section
+    if (location.pathname === '/admin/feedback') {
+      setSection('feedback');
+      navigate('/admin'); // Redirect to /admin but keep the feedback section active
+    }
+  }, [location.pathname, navigate]);
 
   return (
     <div className="flex flex-col h-screen">
@@ -17,6 +29,7 @@ const AdminDashboard: React.FC = () => {
           {section === 'users' && <UsersTable />}
           {section === 'scrape' && <ScrapeJobsSection onViewScrapedJobs={() => setSection('scraped')} />}
           {section === 'scraped' && <ScrapedJobsTable />}
+          {section === 'feedback' && <FeedbackTable />}
         </main>
       </div>
     </div>

@@ -15,6 +15,9 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
+            <Link to="/feedback" className="nav-link">
+              Feedback
+            </Link>
             <Link to="/signin" className="btn-primary">
               Sign In
             </Link>
@@ -37,7 +40,12 @@ const Navbar = () => {
             <a href="#" className="nav-link">
               Contact
             </a>
-            <button className="btn-primary w-full text-left">Sign In</button>
+            <Link to="/feedback" className="nav-link">
+              Feedback
+            </Link>
+            <Link to="/signin" className="btn-primary w-full text-left">
+              Sign In
+            </Link>
           </div>
         </div>
       )}

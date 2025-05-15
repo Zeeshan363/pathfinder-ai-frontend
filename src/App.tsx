@@ -21,11 +21,23 @@ import ChatBot from "./components/ChatBot";
 import CareerAIPage from "./pages/CareerAIPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import JobRecommendationsPage from "./pages/JobRecommendationsPage";
+import FeedbackPage from "./pages/FeedbackPage";
 
 // Protected route component
 const ProtectedRoute = ({ children }: any) => {
   const token = localStorage.getItem("token");
   if (!token) {
+    return <Navigate to="/signin" replace />;
+  }
+  return children;
+};
+
+// Admin route component
+const AdminRoute = ({ children }: any) => {
+  const token = localStorage.getItem("token");
+  const isAdmin = localStorage.getItem("adminName") !== null;
+  
+  if (!token || !isAdmin) {
     return <Navigate to="/signin" replace />;
   }
   return children;
@@ -44,6 +56,7 @@ function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/signin" element={<SigninPage />} />
+              <Route path="/feedback" element={<FeedbackPage />} />
               
               {/* Protected routes */}
               <Route path="/student/profile" element={
@@ -76,7 +89,18 @@ function App() {
                   <JobRecommendationsPage />
                 </ProtectedRoute>
               } />
-              <Route path="/admin" element={<AdminDashboard />} />
+              
+              {/* Admin routes */}
+              <Route path="/admin" element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              } />
+              <Route path="/admin/feedback" element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              } />
             </Routes>
           </main>
           
