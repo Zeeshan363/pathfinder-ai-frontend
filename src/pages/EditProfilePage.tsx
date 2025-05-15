@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import {api} from '../services/api';
+import DashboardNavbar from '../components/Dashboard/DashboardNavbar';
+import profileService from '../services/profileService';
+import toast from 'react-hot-toast';
 
 const EditProfilePage: React.FC = () => {
   const navigate = useNavigate();
@@ -13,7 +13,8 @@ const EditProfilePage: React.FC = () => {
     languages: [] as string[],
     interests: [] as string[],
     careerGoals: '',
-    education: [] as any[]
+    education: [] as any[],
+    experience: [] as any[]
   });
 
   const [newSkill, setNewSkill] = useState('');
@@ -32,6 +33,11 @@ const EditProfilePage: React.FC = () => {
     major: ''
   });
 
+  const [experienceForm, setExperienceForm] = useState({
+    companyName: '',
+    totalYearsExperience: ''
+  });
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -41,24 +47,36 @@ const EditProfilePage: React.FC = () => {
 
     const fetchProfile = async () => {
       try {
-        const res = await api.get('/profile');
-        if (res.data.profile) {
-          const { profile } = res.data;
-          setFormData({
-            about: profile.about || '',
-            technicalSkills: profile.technicalSkills || [],
-            softSkills: profile.softSkills || [],
-            languages: profile.languages || [],
-            interests: profile.interests || [],
-            careerGoals: profile.careerGoals || '',
-            education: profile.education || []
-          });
-        } else {
-          navigate('/profile/create');
-        }
-      } catch (error) {
+        const profile = await profileService.getProfile();
+        setFormData({
+          about: profile.about || '',
+          technicalSkills: profile.technical_skills || [],
+          softSkills: profile.soft_skills || [],
+          languages: profile.languages || [],
+          interests: profile.interests || [],
+          careerGoals: profile.career_goals || '',
+          education: profile.education.map(edu => ({
+            id: edu.id,
+            degree: edu.degree,
+            institution: edu.institution,
+            startYear: edu.start_year,
+            endYear: edu.end_year,
+            major: edu.major
+          })) || [],
+          experience: profile.experience.map(exp => ({
+            id: exp.id,
+            companyName: exp.company_name,
+            totalYearsExperience: exp.total_years_experience
+          })) || []
+        });
+      } catch (error: any) {
         console.error('Error fetching profile:', error);
-        setError('Failed to load profile. Please try again.');
+        if (error.response?.status === 404) {
+          navigate('/profile/create');
+        } else {
+          setError('Failed to load profile. Please try again.');
+          toast.error('Failed to load profile');
+        }
       } finally {
         setLoading(false);
       }
@@ -77,6 +95,11 @@ const EditProfilePage: React.FC = () => {
     setEducationForm(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleExperienceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setExperienceForm(prev => ({ ...prev, [name]: value }));
+  };
+
   const addEducation = () => {
     if (educationForm.degree && educationForm.institution && educationForm.startYear && educationForm.major) {
       setFormData(prev => ({
@@ -90,13 +113,59 @@ const EditProfilePage: React.FC = () => {
         endYear: '',
         major: ''
       });
+    } else {
+      toast.error('Please fill in all required education fields');
     }
   };
 
-  const removeEducation = (index: number) => {
+  const removeEducation = async (index: number) => {
+    const education = formData.education[index];
+    if (education.id) {
+      try {
+        await profileService.deleteEducation(education.id);
+        toast.success('Education entry removed');
+      } catch (error) {
+        console.error('Error removing education:', error);
+        toast.error('Failed to remove education entry');
+        return;
+      }
+    }
     setFormData(prev => ({
       ...prev,
       education: prev.education.filter((_, i) => i !== index)
+    }));
+  };
+
+  const addExperience = () => {
+    if (experienceForm.companyName && experienceForm.totalYearsExperience) {
+      setFormData(prev => ({
+        ...prev,
+        experience: [...prev.experience, experienceForm]
+      }));
+      setExperienceForm({
+        companyName: '',
+        totalYearsExperience: ''
+      });
+    } else {
+      toast.error('Please fill in all required experience fields');
+    }
+  };
+
+  const removeExperience = async (index: number) => {
+    const experience = formData.experience[index];
+    if (experience.id) {
+      try {
+        await profileService.deleteExperience(experience.id);
+        toast.success('Experience entry removed');
+      } catch (error) {
+        console.error('Error removing experience:', error);
+        toast.error('Failed to remove experience entry');
+        return;
+      }
+    }
+    setFormData(prev => ({
+      ...prev,
+      experience: prev.experience.filter((_, i) => i !== index)
     }));
   };
 
@@ -174,10 +243,42 @@ const EditProfilePage: React.FC = () => {
     setError('');
 
     try {
-      await api.put('/profile', formData);
+      await profileService.updateProfile({
+        about: formData.about,
+        technical_skills: formData.technicalSkills,
+        soft_skills: formData.softSkills,
+        languages: formData.languages,
+        interests: formData.interests,
+        career_goals: formData.careerGoals
+      });
+
+      // Handle education updates
+      const newEducation = formData.education.filter(edu => !edu.id);
+      for (const edu of newEducation) {
+        await profileService.addEducation({
+          degree: edu.degree,
+          institution: edu.institution,
+          start_year: edu.startYear,
+          end_year: edu.endYear || null,
+          major: edu.major
+        });
+      }
+
+      // Handle experience updates
+      const newExperience = formData.experience.filter(exp => !exp.id);
+      for (const exp of newExperience) {
+        await profileService.addExperience({
+          company_name: exp.companyName,
+          total_years_experience: exp.totalYearsExperience
+        });
+      }
+
+      toast.success('Profile updated successfully');
       navigate('/dashboard');
     } catch (err: any) {
+      console.error('Error updating profile:', err);
       setError(err.response?.data?.message || 'Failed to update profile. Please try again.');
+      toast.error('Failed to update profile');
     } finally {
       setSaveLoading(false);
     }
@@ -186,18 +287,17 @@ const EditProfilePage: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col bg-gray-50">
-        <Navbar />
+        <DashboardNavbar />
         <main className="flex-grow container mx-auto px-4 py-8 flex justify-center items-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600"></div>
         </main>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <Navbar />
+      <DashboardNavbar />
       <main className="flex-grow container mx-auto px-4 py-8">
         <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
           <div className="bg-purple-600 p-6 text-white">
@@ -512,6 +612,74 @@ const EditProfilePage: React.FC = () => {
               )}
             </div>
 
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-lg font-medium text-gray-900">Experience</h3>
+              </div>
+              
+              <div className="bg-gray-50 p-4 rounded-md mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Company Name <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="companyName"
+                      value={experienceForm.companyName}
+                      onChange={handleExperienceChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="E.g., Tech Solutions Inc."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Total Years Experience <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="totalYearsExperience"
+                      value={experienceForm.totalYearsExperience}
+                      onChange={handleExperienceChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="E.g., 5"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={addExperience}
+                  className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition"
+                >
+                  Add Experience
+                </button>
+              </div>
+
+              {formData.experience.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 mb-3">Experience History</h4>
+                  {formData.experience.map((exp, index) => (
+                    <div
+                      key={index}
+                      className="mb-3 p-3 border border-gray-200 rounded-md bg-white flex justify-between items-center"
+                    >
+                      <div>
+                        <p className="font-medium text-gray-800">{exp.companyName}</p>
+                        <p className="text-gray-500 text-sm">{exp.totalYearsExperience} years</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeExperience(index)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <div className="flex items-center justify-end mt-8 space-x-4">
               <button
                 type="button"
@@ -531,7 +699,6 @@ const EditProfilePage: React.FC = () => {
           </form>
         </div>
       </main>
-      <Footer />
     </div>
   );
 };

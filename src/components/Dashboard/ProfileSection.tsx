@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Pencil } from 'lucide-react';
 
 interface ProfileSectionProps {
   profile: any;
@@ -15,8 +16,17 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ profile }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="bg-purple-600 p-6 text-white">
+      <div className="bg-purple-600 p-6 text-white flex justify-between items-center">
         <h2 className="text-xl font-semibold">Profile</h2>
+        {hasProfile && (
+          <button
+            onClick={() => navigate('/profile/edit')}
+            className="flex items-center text-white hover:text-purple-200 transition-colors"
+          >
+            <Pencil size={16} className="mr-1" />
+            Edit
+          </button>
+        )}
       </div>
 
       <div className="p-6">
@@ -47,15 +57,10 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ profile }) => {
 
             {profile.technical_skills && profile.technical_skills.length > 0 && (
               <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
-                  Technical Skills
-                </h4>
+                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">Technical Skills</h4>
                 <div className="flex flex-wrap gap-2">
                   {profile.technical_skills.map((skill: string, index: number) => (
-                    <span
-                      key={index}
-                      className="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full"
-                    >
+                    <span key={index} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
                       {skill}
                     </span>
                   ))}
@@ -65,34 +70,11 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ profile }) => {
 
             {profile.soft_skills && profile.soft_skills.length > 0 && (
               <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
-                  Soft Skills
-                </h4>
+                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">Soft Skills</h4>
                 <div className="flex flex-wrap gap-2">
                   {profile.soft_skills.map((skill: string, index: number) => (
-                    <span
-                      key={index}
-                      className="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full"
-                    >
+                    <span key={index} className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
                       {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {profile.interests && profile.interests.length > 0 && (
-              <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
-                  Interests
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {profile.interests.map((interest: string, index: number) => (
-                    <span
-                      key={index}
-                      className="bg-yellow-100 text-yellow-800 text-xs px-3 py-1 rounded-full"
-                    >
-                      {interest}
                     </span>
                   ))}
                 </div>
@@ -101,15 +83,10 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ profile }) => {
 
             {profile.languages && profile.languages.length > 0 && (
               <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
-                  Languages
-                </h4>
+                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">Languages</h4>
                 <div className="flex flex-wrap gap-2">
                   {profile.languages.map((language: string, index: number) => (
-                    <span
-                      key={index}
-                      className="bg-purple-100 text-purple-800 text-xs px-3 py-1 rounded-full"
-                    >
+                    <span key={index} className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">
                       {language}
                     </span>
                   ))}
@@ -117,58 +94,25 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ profile }) => {
               </div>
             )}
 
-            {profile.education && profile.education.length > 0 && (
+            {profile.interests && profile.interests.length > 0 && (
               <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
-                  Education
-                </h4>
-                {profile.education.map((edu: any, index: number) => (
-                  <div key={index} className="mb-3 pb-3 border-b border-gray-100 last:border-0">
-                    <p className="font-medium text-gray-800">
-                      {edu.degree} in {edu.major}
-                    </p>
-                    <p className="text-gray-600 text-sm">{edu.institution}</p>
-                    <p className="text-gray-500 text-xs">
-                      {edu.start_year} - {edu.end_year || 'Present'}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {profile.experience && profile.experience.length > 0 && (
-              <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
-                  Experience
-                </h4>
-                {profile.experience.map((exp: any, index: number) => (
-                  <div key={index} className="mb-3 pb-3 border-b border-gray-100 last:border-0">
-                    <p className="font-medium text-gray-800">
-                      {exp.company_name}
-                    </p>
-                    <p className="text-gray-500 text-xs">
-                      {exp.total_years_experience} years
-                    </p>
-                  </div>
-                ))}
+                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">Interests</h4>
+                <div className="flex flex-wrap gap-2">
+                  {profile.interests.map((interest: string, index: number) => (
+                    <span key={index} className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
+                      {interest}
+                    </span>
+                  ))}
+                </div>
               </div>
             )}
 
             {profile.career_goals && (
               <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">
-                  Career Goals
-                </h4>
+                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">Career Goals</h4>
                 <p className="text-gray-700">{profile.career_goals}</p>
               </div>
             )}
-
-            {/* <button
-              onClick={() => navigate('/profile/edit')}
-              className="w-full py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition"
-            >
-              Edit Profile
-            </button> */}
           </>
         ) : (
           <div className="text-center">
