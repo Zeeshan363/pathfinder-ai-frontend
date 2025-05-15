@@ -1,22 +1,36 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
-const DashboardNavbar: React.FC = () => {
+interface DashboardNavbarProps {}
+
+const DashboardNavbar: React.FC<DashboardNavbarProps> = () => {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleSignOut = () => {
     localStorage.removeItem('token');
     toast.success('Signed out successfully');
-    navigate('/signin');
+    navigate('/');
   };
 
   return (
     <nav className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center">
-          <h1 className="text-xl font-bold text-purple-600">Pathfinder</h1>
+          <Link to="/dashboard" className="text-xl font-bold text-purple-600">Pathfinder</Link>
+          
+          <div className="hidden md:flex ml-8 space-x-6">
+            <Link to="/dashboard" className="text-gray-600 hover:text-purple-700">
+              Dashboard
+            </Link>
+            <Link to="/jobs/recommendations" className="text-gray-600 hover:text-purple-700">
+              Job Recommendations
+            </Link>
+            <Link to="/career-ai" className="text-gray-600 hover:text-purple-700">
+              Career AI
+            </Link>
+          </div>
         </div>
 
         <div className="relative">

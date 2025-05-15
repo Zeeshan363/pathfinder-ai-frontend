@@ -72,9 +72,9 @@ const UsersTable: React.FC = () => {
         </table>
       )}
       <div className="flex items-center gap-4">
-        <button onClick={() => setPage(page - 1)} disabled={page === 1} className="bg-purple-800 text-white rounded px-4 py-2 font-medium disabled:bg-gray-300 disabled:cursor-not-allowed">Previous</button>
+        <button onClick={() => setPage(page - 1)} disabled={page === 1} className="bg-[#5f28b8] text-white rounded px-4 py-2 font-medium disabled:bg-gray-300 disabled:cursor-not-allowed">Previous</button>
         <span>Page {page} of {totalPages}</span>
-        <button onClick={() => setPage(page + 1)} disabled={page === totalPages} className="bg-purple-800 text-white rounded px-4 py-2 font-medium disabled:bg-gray-300 disabled:cursor-not-allowed">Next</button>
+        <button onClick={() => setPage(page + 1)} disabled={page === totalPages} className="bg-[#5f28b8] text-white rounded px-4 py-2 font-medium disabled:bg-gray-300 disabled:cursor-not-allowed">Next</button>
       </div>
     </div>
   );

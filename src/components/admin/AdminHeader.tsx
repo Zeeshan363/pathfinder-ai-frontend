@@ -13,7 +13,7 @@ const AdminHeader: React.FC = () => {
   };
 
   return (
-    <header className="flex justify-between items-center bg-purple-800 text-white px-8 h-16 text-lg">
+    <header className="flex justify-between items-center bg-[#5f28b8] text-white px-8 py-2 text-lg">
       <div className="font-bold cursor-pointer" onClick={() => navigate('/')}>Pathfinder</div>
       <div className="relative">
         <div className="flex items-center cursor-pointer px-4 py-2 rounded hover:bg-purple-700" onClick={() => setDropdownOpen(!dropdownOpen)}>

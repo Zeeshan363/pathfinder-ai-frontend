@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import ProfileSection from '../components/Dashboard/ProfileSection';
 import RecommendationsSection from '../components/Dashboard/RecommendationSections';
+import AIJobRecommendations from '../components/Dashboard/AIJobRecommendations';
 import DashboardNavbar from '../components/Dashboard/DashboardNavbar';
 import { api } from '../services/api';
 import toast from 'react-hot-toast';
@@ -104,6 +105,13 @@ const DashboardPage: React.FC = () => {
                 )}
               </div>
             </div>
+            
+            {/* AI Job Recommendations Section */}
+            {hasProfile && (
+              <div className="mb-8">
+                <AIJobRecommendations />
+              </div>
+            )}
             
             {/* Career AI Feature Section */}
             <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">

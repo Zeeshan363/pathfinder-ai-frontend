@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { Briefcase } from 'lucide-react';
 
 interface RecommendationsSectionProps {
   recommendations: any[];
@@ -80,6 +82,17 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({ recomme
             </button> */}
           </div>
         ))}
+
+        {/* Job Recommendations Link */}
+        <div className="mt-6 flex justify-center">
+          <Link 
+            to="/jobs/recommendations" 
+            className="flex items-center px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
+          >
+            <Briefcase size={18} className="mr-2" />
+            <span>View AI Job Recommendations</span>
+          </Link>
+        </div>
       </div>
     </div>
   );
